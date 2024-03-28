@@ -5,11 +5,12 @@
 #include "smartAudio.h"
 #include "tramp.h"
 #include "mspVtx.h"
-#include "serial.h"
+//#include "serial.h"
 #include "errorCodes.h"
 #include "gpio.h"
 #include "button.h"
 #include "modeIndicator.h"
+#include "helpers.h"
 
 #if !DEBUG
 static uint32_t protocol_checked;

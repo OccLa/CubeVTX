@@ -1,5 +1,5 @@
 #include "common.h"
-#include "serial.h"
+#include "vtx_serial.h"
 #include "targets.h"
 #include "openVTxEEPROM.h"
 #include "rtc6705.h"
@@ -114,6 +114,10 @@ void status_led1(uint8_t state)
   gpio_out_write(led1_pin, state);
 #else
   (void)state;
+  if (state)
+    LL_GPIO_ResetOutputPin(LED_PWR0_GPIO_Port, LED_PWR0_Pin);
+  else
+    LL_GPIO_SetOutputPin(LED_PWR0_GPIO_Port, LED_PWR0_Pin);
 #endif
 }
 
@@ -173,7 +177,8 @@ struct bootloader {
 
 void reboot_into_bootloader(uint32_t baud)
 {
-    extern uint32_t _bootloader_data;
+    //extern uint32_t _bootloader_data;
+    uint32_t _bootloader_data; // todo linker
     struct bootloader * blinfo = (struct bootloader*)&_bootloader_data;
     blinfo->key = BOOTLOADER_KEY;
     blinfo->reset_type = BOOTLOADER_TYPE;

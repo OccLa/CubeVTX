@@ -42,7 +42,7 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "vtx_serial.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -98,8 +98,12 @@ void Error_Handler(void);
 #define LED_FR6_GPIO_Port GPIOA
 #define LED_FR7_Pin LL_GPIO_PIN_15
 #define LED_FR7_GPIO_Port GPIOA
-#define SC_SPI1_Pin LL_GPIO_PIN_4
-#define SC_SPI1_GPIO_Port GPIOB
+#define CS2_SPICLK_Pin LL_GPIO_PIN_3
+#define CS2_SPICLK_GPIO_Port GPIOB
+#define CS1_SPILE_Pin LL_GPIO_PIN_4
+#define CS1_SPILE_GPIO_Port GPIOB
+#define CS0_SPIDATA_Pin LL_GPIO_PIN_5
+#define CS0_SPIDATA_GPIO_Port GPIOB
 #define LED_PWR0_Pin LL_GPIO_PIN_8
 #define LED_PWR0_GPIO_Port GPIOB
 

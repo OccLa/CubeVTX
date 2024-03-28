@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+#include "stm32f0xx_hal.h"
 
 #define CONCAT_helper(x, y) x ## y
 #define CONCAT(x, y) CONCAT_helper(x, y)

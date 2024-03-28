@@ -1,6 +1,8 @@
 #include "modeIndicator.h"
 #include "openVTxEEPROM.h"
 #include "targets.h"
+#include <stddef.h>
+#include "helpers.h"
 
 /*
     Channel frequency table for reference

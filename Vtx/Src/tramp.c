@@ -3,7 +3,8 @@
 #include "openVTxEEPROM.h"
 #include "rtc6705.h"
 #include "targets.h"
-#include "serial.h"
+#include "vtx_serial.h"
+#include "helpers.h"
 
 
 #define TRAMP_HEADER    0x0F // 15

@@ -12,8 +12,8 @@
 #define PredriverandPAControlRegister 0x07
 #define StateRegister 0x0F
 
-#define READ_BIT 0x00
-#define WRITE_BIT 0x01
+#define READ_BIT_0 0x00
+#define WRITE_BIT_1 0x01
 
 #define SYNTH_REG_A_DEFAULT 0x0190
 #define POWER_AMP_ON 0b10011111011111100000

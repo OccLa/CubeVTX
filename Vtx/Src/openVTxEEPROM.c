@@ -1,7 +1,8 @@
 #include "common.h"
 #include "openVTxEEPROM.h"
 #include "targets.h"
-#include <EEPROM.h>
+//#include <EEPROM.h>
+#include "helpers.h"
 
 
 openVTxEEPROM myEEPROM;
@@ -16,7 +17,7 @@ void updateEEPROM(void)
 void defaultEEPROM(void)
 {
     myEEPROM.version = versionEEPROM;
-    myEEPROM.vtxMode = TRAMP;
+    myEEPROM.vtxMode = SMARTAUDIO;
     myEEPROM.currFreq = 5800;
     myEEPROM.channel = 27; // F4
     myEEPROM.freqMode = 0;
@@ -31,7 +32,7 @@ void defaultEEPROM(void)
 
 void readEEPROM(void)
 {
-    EEPROM_get(0, myEEPROM);
+    //EEPROM_get(0, myEEPROM);
 
     if (myEEPROM.version != versionEEPROM) {
         defaultEEPROM();
@@ -45,7 +46,7 @@ void writeEEPROM(void)
         updateEEPROMtime = 0;
 
     if (updateEEPROMtime && (millis() - updateEEPROMtime) > 1000) {
-        EEPROM_put(0, myEEPROM);
+        //EEPROM_put(0, myEEPROM);
         updateEEPROMtime = 0;
 
         // Red LED blinks a couple of times as a visual indication.

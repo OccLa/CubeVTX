@@ -18,13 +18,22 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "spi.h"
 #include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "helpers.h"
+#include "openVTxEEPROM.h"
+#include "common.h"
+#include "rtc6705.h"
+#include "smartAudio.h"
+#include "tramp.h"
+#include "mspVtx.h"
+#include "button.h"
+#include "targets.h"
+#include "errorCodes.h"
+#include "vtx_gpio.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -57,6 +66,53 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+void start_serial(uint8_t type)
+{
+  uint32_t baud, stopbits;
+  switch (type) {
+    case TRAMP:
+      baud = TRAMP_BAUD;
+      stopbits = LL_USART_STOPBITS_1;
+      trampReset();
+      break;
+    case SMARTAUDIO:
+      baud = SMARTAUDIO_BAUD;
+      stopbits = LL_USART_STOPBITS_2;
+      smartaudioReset();
+      break;
+    case MSP:
+      baud = MSP_BAUD;
+      stopbits = LL_USART_STOPBITS_1;
+      mspReset();
+      break;
+    default:
+      baud = 115200;
+      stopbits = LL_USART_STOPBITS_1;
+      break;
+  }
+  //serial_begin(baud, UART_TX, UART_RX, stopbits);
+  customSerialSet(baud, stopbits);
+  myEEPROM.vtxMode = type;
+}
+
+void checkRTC6705isAlive()
+{
+  if (!rtc6705CheckFrequency())
+  {
+    rtc6705WriteFrequency(myEEPROM.currFreq); // Tries and set the correct freq to the RTC6705
+
+    if (currentErrorMode == NO_ERROR)
+    {
+      currentErrorMode = RTC6705_NOT_DETECTED;
+    }
+  } else {
+    if (currentErrorMode == RTC6705_NOT_DETECTED)
+      {
+        currentErrorMode = NO_ERROR;
+      }
+  }
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -87,9 +143,25 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_SPI1_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+
+  // target_rfPowerAmpPinSetup();
+  // rtc6705spiPinSetup();
+
+  readEEPROM();
+
+  pitMode = myEEPROM.pitmodeInRange;
+
+  rtc6705ResetState(); // During testing registers got messed up. So now it gets reset on boot!
+  rtc6705WriteFrequency(myEEPROM.currFreq);
+
+  start_serial(myEEPROM.vtxMode);
+
+  status_leds_init();
+  //button_init(); -- replaced by MX_GPIO_Init()
+
+  resetModeIndication();
 
   /* USER CODE END 2 */
 
@@ -97,12 +169,54 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    LL_GPIO_TogglePin(LED_PWR0_GPIO_Port, LED_PWR0_Pin);
-    HAL_Delay(100);
-    LL_GPIO_TogglePin(LED_CH0_GPIO_Port, LED_CH0_Pin);
-    HAL_Delay(100);
-    LL_GPIO_TogglePin(LED_FR2_GPIO_Port, LED_FR2_Pin);
-    HAL_Delay(500);
+    uint32_t now = millis();
+
+    // ToDo -- protocol detect
+
+    /* Process uart data */
+    switch (myEEPROM.vtxMode) {
+      case TRAMP:
+        trampProcessSerial();
+        break;
+      case SMARTAUDIO:
+        smartaudioProcessSerial();
+        break;
+      case MSP:
+        mspUpdate(now);
+        break;
+      default:
+        break;
+    }
+
+    checkButton();
+
+    rtc6705PowerUpAfterPLLSettleTime();
+
+    checkPowerOutput();
+
+    checkRTC6705isAlive();
+
+    errorCheck();
+
+    writeEEPROM();
+
+    //target_loop(); todo
+
+    if (LED_INDICATION_OF_VTX_MODE && !(vtxModeLocked && myEEPROM.vtxMode == TRAMP)) // TRAMP doesnt use VTx Tables so LED indication of band/channel doesnt really work.
+      modeIndicationLoop();
+    else
+      status_led2(vtxModeLocked);
+
+    //LL_GPIO_TogglePin(LED_PWR0_GPIO_Port, LED_PWR0_Pin);
+    //HAL_Delay(100);
+    //LL_GPIO_TogglePin(LED_CH0_GPIO_Port, LED_CH0_Pin);
+    //HAL_Delay(100);
+    //LL_GPIO_TogglePin(LED_FR2_GPIO_Port, LED_FR2_Pin);
+    if (getButtonState())
+      LL_GPIO_SetOutputPin(LED_PWR1_GPIO_Port, LED_PWR1_Pin);
+    else
+      LL_GPIO_ResetOutputPin(LED_PWR1_GPIO_Port, LED_PWR1_Pin);
+    //HAL_Delay(500);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

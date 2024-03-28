@@ -4,6 +4,7 @@
 #include "rtc6705.h"
 #include "helpers.h"
 #include "openVTxEEPROM.h"
+#include "vtx_gpio.h"
 
 #ifdef LED_INDICATION_OF_VTX_MODE
 #include "modeIndicator.h"
@@ -35,7 +36,8 @@ void checkButton(void)
 {
     uint32_t now = millis();
     previous_button_state = current_button_state;
-    current_button_state = gpio_in_read(buttonPin);
+    // current_button_state = gpio_in_read(buttonPin);
+    current_button_state = getButtonState();
 
     // Button pressed
     if (current_button_state == BUTTON_PRESSED && previous_button_state == BUTTON_RELEASED)

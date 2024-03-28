@@ -4,7 +4,7 @@
 #include "rtc6705.h"
 #include "targets.h"
 #include "helpers.h"
-#include "serial.h"
+#include "vtx_serial.h"
 
 /**** SmartAudio definitions ****/
 #define CRC_LEN         1

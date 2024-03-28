@@ -4,7 +4,7 @@
 
 #define versionEEPROM 0x111
 
-uint32_t updateEEPROMtime;
+extern uint32_t updateEEPROMtime;
 
 typedef enum
 {
