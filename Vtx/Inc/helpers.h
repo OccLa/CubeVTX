@@ -21,6 +21,8 @@ uint8_t serial_read(void);
 void serial_flush(void);
 */
 
+//void Serial_write_len(uint8_t *data, uint32_t size);
+
 // TODO
 typedef struct
 {
@@ -61,5 +63,3 @@ void serial_begin(uint32_t baud, uint32_t tx_pin, uint32_t rx_pin, uint8_t stopb
 #define SPI_MOSI 0
 
 #define LED_INDICATION_OF_VTX_MODE 1
-
-void Serial_write_len(uint8_t *data, uint32_t size);

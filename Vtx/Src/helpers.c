@@ -31,7 +31,8 @@ uint8_t saPowerLevelsLabel[SA_NUM_POWER_LEVELS * POWER_LEVEL_LABEL_LENGTH] = {
         '2', '5', ' ',
         '1', '0', '0',
         '4', '0', '0'};
-
-// ToDo
+/*
 void Serial_write_len(uint8_t *data, uint32_t size) {
 }
+*/
+// ToDo

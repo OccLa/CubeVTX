@@ -113,7 +113,6 @@ void status_led1(uint8_t state)
 #ifdef LED1
   gpio_out_write(led1_pin, state);
 #else
-  (void)state;
   if (state)
     LL_GPIO_ResetOutputPin(LED_PWR0_GPIO_Port, LED_PWR0_Pin);
   else
@@ -126,7 +125,10 @@ void status_led2(uint8_t state)
 #ifdef LED2
   gpio_out_write(led2_pin, state);
 #else
-  (void)state;
+  if (state)
+    LL_GPIO_ResetOutputPin(LED_CH0_GPIO_Port, LED_CH0_Pin);
+  else
+    LL_GPIO_SetOutputPin(LED_CH0_GPIO_Port, LED_CH0_Pin);
 #endif
 }
 
@@ -135,7 +137,10 @@ void status_led3(uint8_t state)
 #ifdef LED3
   gpio_out_write(led3_pin, state);
 #else
-  (void)state;
+  if (state)
+    LL_GPIO_ResetOutputPin(LED_FR0_GPIO_Port, LED_FR0_Pin);
+  else
+    LL_GPIO_SetOutputPin(LED_FR0_GPIO_Port, LED_FR0_Pin);
 #endif
 }
 
