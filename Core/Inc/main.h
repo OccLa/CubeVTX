@@ -104,6 +104,8 @@ void Error_Handler(void);
 #define CS1_SPILE_GPIO_Port GPIOB
 #define CS0_SPIDATA_Pin LL_GPIO_PIN_5
 #define CS0_SPIDATA_GPIO_Port GPIOB
+#define RX_ACTIVITY_Pin LL_GPIO_PIN_7
+#define RX_ACTIVITY_GPIO_Port GPIOB
 #define LED_PWR0_Pin LL_GPIO_PIN_8
 #define LED_PWR0_GPIO_Port GPIOB
 

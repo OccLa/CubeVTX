@@ -11,19 +11,23 @@ uint8_t serial_read(void){
 }
 
 void Serial_write_len(uint8_t *data, uint32_t size) {
-  uint8_t i = 3;
+  LL_USART_DisableDirectionRx(USART1);
+  LL_USART_EnableDirectionTx(USART1);
+/*  uint8_t i = 3;
   while(i--) {
     LL_USART_TransmitData8(USART1, 0x00);
     while (!LL_USART_IsActiveFlag_TXE(USART1)) {
       ;
     }
-  }
+  }*/
   while(size--) {
     LL_USART_TransmitData8(USART1, *data++);
     while (!LL_USART_IsActiveFlag_TXE(USART1)) {
       ;
     }
   }
+  LL_USART_DisableDirectionTx(USART1);
+  LL_USART_EnableDirectionRx(USART1);
   HAL_Delay(2);
   serial_flush();
 }
@@ -39,13 +43,14 @@ void customSerialSet(uint32_t baud, uint32_t stopbits) {
   USART_InitStruct.StopBits = stopbits;
   USART_InitStruct.Parity = LL_USART_PARITY_NONE;
   USART_InitStruct.TransferDirection = LL_USART_DIRECTION_TX_RX;
-  USART_InitStruct.HardwareFlowControl = LL_USART_HWCONTROL_NONE;
   USART_InitStruct.OverSampling = LL_USART_OVERSAMPLING_16;
   LL_USART_Init(USART1, &USART_InitStruct);
   LL_USART_EnableIT_RXNE(USART1);
-  LL_USART_DisableIT_CTS(USART1);
-  LL_USART_ConfigAsyncMode(USART1);
+  LL_USART_DisableOverrunDetect(USART1);
+  LL_USART_ConfigHalfDuplexMode(USART1);
   LL_USART_Enable(USART1);
+  LL_USART_DisableDirectionTx(USART1);
+  LL_USART_EnableDirectionRx(USART1);
 }
 
 void fillRxBuffer(void) {
