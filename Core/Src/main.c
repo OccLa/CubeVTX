@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -145,6 +146,7 @@ int main(void)
   MX_GPIO_Init();
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
   // target_rfPowerAmpPinSetup();
@@ -163,6 +165,9 @@ int main(void)
   //button_init(); -- replaced by MX_GPIO_Init()
 
   resetModeIndication();
+
+  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
+  TIM2->CCR1 = 0xF;
 
   /* USER CODE END 2 */
 

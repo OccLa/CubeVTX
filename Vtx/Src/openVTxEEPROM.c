@@ -23,8 +23,8 @@ void defaultEEPROM(void)
     myEEPROM.freqMode = 0;
     myEEPROM.pitmodeInRange = 0;
     myEEPROM.pitmodeOutRange = 0;
-    myEEPROM.currPowerdB = 14;
-    myEEPROM.currPowermW = 25; // Required due to rounding errors when converting between dBm and mW
+    myEEPROM.currPowerdB = 0x0f;
+    myEEPROM.currPowermW = 0x0f; // Required due to rounding errors when converting between dBm and mW
     myEEPROM.unlocked = 1;
 
     updateEEPROM();

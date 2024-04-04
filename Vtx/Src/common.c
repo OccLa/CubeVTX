@@ -167,8 +167,9 @@ void setPowermW(uint16_t mW)
 {
     myEEPROM.currPowermW = mW;
 
-    float dB = 10.0 * log10f((float)mW);  // avoid double conversion!
-    setPowerdB(dB);
+    // float dB = 10.0 * log10f((float)mW);  // avoid double conversion!
+    // setPowerdB(dB);
+    setPowerdB(mW);
 }
 
 #define BOOTLOADER_KEY  0x4f565458 // OVTX

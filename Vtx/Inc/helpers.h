@@ -43,7 +43,7 @@ gpio_out_t gpio_out_setup(uint32_t pin, uint32_t val);
 uint8_t gpio_in_read(gpio_in_t g);
 void gpio_out_write(gpio_out_t g, uint32_t val);
 
-#define MAX_POWER                   400 // mW
+#define MAX_POWER                   1005 // mW
 #define SA_NUM_POWER_LEVELS         5 // Max 5 for INAV.
 #define POWER_LEVEL_LABEL_LENGTH    3
 extern uint8_t saPowerLevelsLut[SA_NUM_POWER_LEVELS];
